@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,10 +85,19 @@ public class ChooseAreaFragment extends Fragment {
                 }else if(currentLevel == LEVEL_COUNTY)
                 {
                     String weatherId = countyList.get(position).getWeatherId();
-                    Intent intent = new Intent(getActivity(),activity_Weather.class);
-                    intent.putExtra("weather_id",weatherId);
-                    startActivity(intent);
-                    getActivity().finish();
+                    if(getActivity() instanceof MainActivity) {
+                        Intent intent = new Intent(getActivity(), activity_Weather.class);
+                        intent.putExtra("weather_id", weatherId);
+                        startActivity(intent);
+                        getActivity().finish();
+                    }else if(getActivity() instanceof activity_Weather)
+                    {
+                        activity_Weather activity = (activity_Weather)getActivity();
+                        activity.drawerLayout.closeDrawer(GravityCompat.START);
+                        activity.refreshLayout.setRefreshing(true);
+                        activity.requestWeather(weatherId);
+
+                    }
 
 
                 }
